@@ -14,15 +14,11 @@ while(
         $array[]= array($row["idWeersomstandighedenPerDag"], $row["datum"], $row["aantalGraden"], $row["windkracht"], $row["regenInMilimeters"], $row["plaats"]);
     }
     foreach($array as $arr){
-        echo $arr[1];
-        echo '<br>';
-        echo $arr[2];
-        echo '<br>';
-        echo $arr[3];
-        echo '<br>';
-        echo $arr[4];
-        echo '<br>';
-        echo $arr[5];
-        echo '<br>';
-        echo '<br>';
+        ?>
+        <b>Datum: </b><?echo $arr[1];?><br>
+        <b>Graden: </b><?echo $arr[2];?><br>
+        <b>WindKracht: </b><?echo $arr[3];?><br>
+        <b>Aantal Regen In Millimeter: </b><?echo $arr[4];?><br>
+        <b>Locatie: </b><?echo $arr[5];?><br><br>
+        <?
       }
