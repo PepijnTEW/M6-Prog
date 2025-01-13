@@ -29,6 +29,20 @@ function toPhpWithPost() {
     let form = event.target;
     let jsonform = FromToDictionary(form);
     console.log(jsonform);
+    
+    let options = 
+    {
+        method: "POST",
+        cache: "no-cache",
+        headers: { "Content-Type": "application/json"},
+        body: JSON.stringify(jsonform)
+    }
+    fetch("fetchPost.php",options)
+    .then(async (response)=>
+    {
+        console.log(response);
+    });
+    console.log(options);
 }
 function FromToDictionary(form) {
     const data = new FormData(form);

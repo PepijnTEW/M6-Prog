@@ -2,7 +2,7 @@
 require_once '../source/config.php';
 require_once SOURCE_ROOT . 'database.php';
 $connection = database_connect();
-$sql = "SELECT * FROM weersomstandighedenPerDag WHERE plaats IN (?) ORDER BY datum"; 
+$sql = "SELECT * FROM WeersomstandighedenPerDag WHERE plaats IN (?) ORDER BY datum"; 
 $stmt = $connection->prepare($sql);
 $plaats = $_GET;
 $newPlaats = implode($plaats);
@@ -11,7 +11,7 @@ $stmt->execute();
 $result = $stmt->get_result();
 while(
     $row = mysqli_fetch_assoc($result)){
-        $array[]= array($row["idWeersomstandighedenPerDag"], $row["datum"], $row["aantalGraden"], $row["windkracht"], $row["regenInMilimeters"], $row["plaats"]);
+        $array[]= array($row["id"], $row["Datum"], $row["aantalGraden"], $row["windKracht"], $row["regenInMilimeters"], $row["plaats"]);
     }
     foreach($array as $arr){
         ?>
