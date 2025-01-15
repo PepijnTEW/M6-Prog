@@ -40,9 +40,9 @@ function FindPersoon($conn,$name)
             $searchResults = GetQueryResultsAssoc($result);
             return $searchResults;
         }
-        catch(ex)
-        {
-            echo "error during query" . ex;
+        catch (Exception $ex) {
+            error_log("Error during query: " . $ex->getMessage());
+            echo json_encode(["error" => "An error occurred while executing the query."]);
         }
     }
     return [];

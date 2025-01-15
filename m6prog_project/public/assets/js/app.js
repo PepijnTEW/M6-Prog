@@ -16,6 +16,14 @@ function searchPersoon(event) {
         console.log(response);
         let json = await response.json();
         console.log(json);
+        showPersoon(json);
     });
-
+}
+function showPersoon(json){
+    let person = json[0];
+    document.getElementById("naam").textContent = person.naam;
+    document.getElementById("id").textContent = person.id;
+    document.getElementById("huisnummer").textContent = person.huisnummer;
+    document.getElementById("postcode").textContent = person.postcode;
+    document.getElementById("email").textContent = person.email;
 }
