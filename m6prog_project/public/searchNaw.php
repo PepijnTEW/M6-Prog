@@ -2,7 +2,7 @@
 require_once '../source/config.php';
 require_once SOURCE_ROOT . 'database.php';
 
-$searchInput = $_GET['searchPersoon'];
+$searchInput = $_GET["search"];
 $conn = database_connect();
 $searchResults = FindPersoon($conn,$searchInput);
 $conn->close();
