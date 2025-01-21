@@ -25,7 +25,7 @@ function toPhpWithGet() {
             console.log(response);
         });
 }
-function toPhpWithPost() {
+function toPhpWithPost(event) {
     let form = event.target;
     let jsonform = FromToDictionary(form);
     console.log(jsonform);
