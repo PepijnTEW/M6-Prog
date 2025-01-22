@@ -20,4 +20,4 @@ while(
         <b>Aantal Regen In Millimeter: </b><?echo $arr[4];?><br>
         <b>Locatie: </b><?echo $arr[5];?><br><br>
         <?
-      }
+}
