@@ -2,11 +2,10 @@
 require_once '../source/config.php';
 require_once SOURCE_ROOT . 'database.php';
 $connection = database_connect();
-$sql = "SELECT * FROM WeersomstandighedenPerDag WHERE plaats IN (?) ORDER BY datum"; 
+$sql = 'SELECT * FROM table_name WHERE Plaats LIKE ? ORDER BY Datum'; 
 $stmt = $connection->prepare($sql);
-$plaats = $_GET;
-$newPlaats = implode($plaats);
-$stmt->bind_param('s', $newPlaats);
+$plaats =  '%' . $_GET['zoeken'] . '%';
+$stmt->bind_param('s', $plaats);
 $stmt->execute();
 $result = $stmt->get_result();
 while(

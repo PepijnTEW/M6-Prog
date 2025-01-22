@@ -30,11 +30,11 @@ if ($count['count'] > 0) {
     return false;
 }
 
-
 $q = "INSERT INTO naw (naam,email,straat,huisnummer,postcode) VALUES (?,?,?,?,?); ";
 $stmt = $conn->prepare($q);
 $stmt ->bind_param("sssss",$name, $email, $straat, $huisnummer, $postcode);
 $result = $stmt->execute();
+$insert_id = $stmt->insert_id;
 $respond = ["succeeded" => $result];
 echo json_encode( $respond);
 
