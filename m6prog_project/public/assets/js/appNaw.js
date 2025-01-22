@@ -36,3 +36,14 @@ function addPerson(event){
         console.log(json);
     });
 }
+
+fetch("nawopslaan.php", options)
+    .then(response => response.json())
+    .then(data => {
+        if (false === data.success) {
+            alert('niet goed');
+            return false;
+        }
+        console.log( 'Je data is toegevoegd met id:' + data.id );
+    })
+    .catch(error => console.error(error));
