@@ -12,11 +12,10 @@ function insertImageinDb($file_name, $file_path, $file_size, $resolution)
         return "Database error: " . $conn->error;
     }
 
-    // ✅ Corrected bind_param data types (resolution is a string, not an integer)
     $stmt->bind_param("ssis", $file_name, $file_path, $file_size, $resolution);
 
     if ($stmt->execute()) {
-        return true;
+        return $conn->insert_id; // ✅ Return the last inserted ID instead of true
     } else {
         return "Database insert failed: " . $stmt->error;
     }
@@ -32,7 +31,6 @@ function handleFiles($file)
     $fileName = __DIR__ . "/../uploads/$link.$ext"; 
 
     if (move_uploaded_file($location, $fileName)) {
-        // ✅ Ensure the file is a valid image
         $imageInfo = getimagesize($fileName);
 
         if ($imageInfo === false) {
@@ -42,39 +40,45 @@ function handleFiles($file)
         list($width, $height) = $imageInfo;
         $resolution = $width . "x" . $height;
 
-        // ✅ Ensure `file_path` is correctly stored
-        $file_path = realpath($fileName); // Convert to absolute path
+        // ✅ Convert file path to absolute
+        $file_path = realpath($fileName);
         
         // ✅ Debugging: Check the actual file path and resolution
         error_log("File path: " . $file_path);
         error_log("Resolution: " . $resolution);
 
-        // Insert into database
-        $insertResult = insertImageinDb(basename($fileName), $file_path, $file["size"], $resolution);
+        // Insert into database and get file ID
+        $fileid = insertImageinDb(basename($fileName), $file_path, $file["size"], $resolution);
         
-        if ($insertResult === true) {
-            return true;
+        if (is_numeric($fileid)) {
+            return $fileid; // ✅ Return the file ID instead of true
         } else {
-            return $insertResult; // Return error message
+            return $fileid; // Return error message
         }
     }
 
     return "Failed to move uploaded file.";
 }
 
-$response = ["succeeded" => false, "message" => ""];
+function createLink($fileid)
+{
+    return "http://" . $_SERVER['HTTP_HOST'] . "/imagedownload.php?file=" . urlencode($fileid);
+}
+
+$response = ["succeeded" => false, "message" => "", "downloadlink" => null];
 
 if (isset($_FILES["image"])) {
     $file = $_FILES["image"];
 
     if ($file["error"] === 0) {
-        $uploadResult = handleFiles($file);
+        $fileid = handleFiles($file);
 
-        if ($uploadResult === true) {
+        if (is_numeric($fileid)) {
             $response["succeeded"] = true;
             $response["message"] = "File uploaded successfully.";
+            $response["downloadlink"] = createLink($fileid); // ✅ Now stores the link correctly
         } else {
-            $response["message"] = $uploadResult; // Display error message
+            $response["message"] = $fileid; // Display error message
         }
     } else {
         $response["message"] = "Error during upload: " . $file["error"];
