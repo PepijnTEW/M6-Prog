@@ -25,13 +25,25 @@ function uploadFormFile(event)
     }
 
     fetch("imageRecieve.php", options)
-    .then(response => response.json())
-    .then(data => {
-        console.log("Upload success:", data);
-        alert("File uploaded successfully!");
+    .then(async (response)=>
+    {
+        console.log(response);
+        let json = await response.json();
+        console.log(json);
+        showLink(json);
     })
-    .catch(error => {
-        console.error("Error:", error);
-        alert("File upload failed!");
-    });
+}
+
+function showLink(json) {
+    // Ensure `downloadLink` is selected correctly
+    const Link = document.getElementById("link");
+
+    if (json.downloadlink) {
+        Link.setAttribute("href", json.downloadlink);
+        Link.textContent = "Download File";
+        Link.style.display = "block"; // Ensure the link is visible
+    } else {
+        Link.textContent = "No link available";
+        Link.removeAttribute("href");
+    }
 }

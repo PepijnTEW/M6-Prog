@@ -12,7 +12,7 @@ postForm.addEventListener("submit", (event) => {
     toPhpWithPost(event);
 })
 
-function toPhpWithGet() {
+function toPhpWithGet(event) {
     let form = event.target;
     const data = new FormData(form);
 
