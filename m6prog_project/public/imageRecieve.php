@@ -12,8 +12,8 @@ function insertImageinDb($file_name, $file_path, $file_size, $resolution)
         return "Database error: " . $conn->error;
     }
 
-    // ✅ Ensure correct data types
-    $stmt->bind_param("ssii", $file_name, $file_path, $file_size, $resolution);
+    // ✅ Corrected bind_param data types (resolution is a string, not an integer)
+    $stmt->bind_param("ssis", $file_name, $file_path, $file_size, $resolution);
 
     if ($stmt->execute()) {
         return true;
@@ -32,14 +32,22 @@ function handleFiles($file)
     $fileName = __DIR__ . "/../uploads/$link.$ext"; 
 
     if (move_uploaded_file($location, $fileName)) {
-        list($width, $height) = getimagesize($fileName);
+        // ✅ Ensure the file is a valid image
+        $imageInfo = getimagesize($fileName);
+
+        if ($imageInfo === false) {
+            return "Invalid image file.";
+        }
+
+        list($width, $height) = $imageInfo;
         $resolution = $width . "x" . $height;
 
         // ✅ Ensure `file_path` is correctly stored
         $file_path = realpath($fileName); // Convert to absolute path
         
-        // ✅ Debugging: Check the actual file path
+        // ✅ Debugging: Check the actual file path and resolution
         error_log("File path: " . $file_path);
+        error_log("Resolution: " . $resolution);
 
         // Insert into database
         $insertResult = insertImageinDb(basename($fileName), $file_path, $file["size"], $resolution);
